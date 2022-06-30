@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import TaskBar from "./TaskBar";
+import TaskForm from "./TaskForm";
+import TaskHeader from './TaskHeader';
+import { fetchUsers } from './redux/fetchUsers';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 function App() {
+  const [task, setTask] = useState(false)
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+        <TaskHeader count ={user.users.length ? user.users.length : 0}/>
+        {task ? <TaskBar setTask={setTask} /> : <TaskForm setTask={setTask} />}
+      </div>
   );
 }
 

@@ -1,0 +1,23 @@
+.form__container {
+  margin-bottom: 1rem;
+}
+label {
+  display: block;
+  margin-bottom: .35rem;
+}
+
+input {
+  width: 12rem;
+  padding: 5px;
+  outline: none;
+}
+select{
+  width: 12rem;
+  padding: .5rem;
+  outline: none;
+}
+
+.form__combined {
+  display: flex;
+  justify-content: space-between;
+}
