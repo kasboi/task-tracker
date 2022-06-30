@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import styles from './style/TaskForm.module.css'
+import styles from '../style/TaskForm.module.css'
+import { SUBMIT_LINK, TOKEN } from '../handlers/token';
+
 
 import { useSelector, useDispatch } from 'react-redux';
-import { descAction, dateAction, timeAction, timeZoneAction } from './redux/formData';
+import { descAction, dateAction, timeAction, timeZoneAction } from '../redux/formData';
 
 const FormContainer = styled.form`
   display: 'block';
@@ -16,9 +18,10 @@ const FormContainer = styled.form`
   overflow: hidden;
 `
 
-function TaskForm({setTask}) {
+function TaskForm({ setTask }) {
   const [startDate, setStartDate] = useState(new Date())
   const [startTime, setStartTime] = useState(new Date())
+
 
   function dateConvert (date){
     let mm = date.getMonth() + 1; // getMonth() is zero-based
@@ -42,24 +45,24 @@ function TaskForm({setTask}) {
   const handleSubmit = (e) => {
 
     e.preventDefault()
-
-    fetch("https://stage.api.sloovi.com/task/lead_465c14d0e99e4972b6b21ffecf3dd691?company_id=company_413ef22b6237417fb1fba7917f0f69e7", {
+    dispatch(descAction(''))
+    
+    fetch(SUBMIT_LINK, {
       method: "POST",
       headers: {
-                'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NTY1MTM4MjksIm5iZiI6MTY1NjUxMzgyOSwianRpIjoiNzA1MDZlZjctMzllNy00ZjI5LTlhMTYtNzkzNmM2M2Q2OGU0IiwiaWRlbnRpdHkiOnsibmFtZSI6IlN1bmRhciBQaWNoYWkiLCJlbWFpbCI6InNtaXRod2lsbHMxOTg5QGdtYWlsLmNvbSIsInVzZXJfaWQiOiJ1c2VyXzRlZTRjZjY3YWQ0NzRhMjc5ODhiYzBhZmI4NGNmNDcyIiwiaWNvbiI6Imh0dHA6Ly93d3cuZ3JhdmF0YXIuY29tL2F2YXRhci9jZjk0Yjc0YmQ0MWI0NjZiYjE4NWJkNGQ2NzRmMDMyYj9kZWZhdWx0PWh0dHBzJTNBJTJGJTJGczMuc2xvb3ZpLmNvbSUyRmF2YXRhci1kZWZhdWx0LWljb24ucG5nIiwiYnlfZGVmYXVsdCI6Im91dHJlYWNoIn0sImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.XNSyFWwTpmUEGuVpGIb92uYcnUd_mfgPBsh6FdV8f1U',
+                'Authorization': 'Bearer ' + TOKEN,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'          
               },
-  body: JSON.stringify({
-                assigned_user: user_id, 
-                task_date: date,
-                task_time: time,
-                is_completed: 0,
-		            time_zone: timeZone,
-                task_msg: description
-               })
-}).then(console.log('success'))
-
+        body: JSON.stringify({
+                      assigned_user: user_id, 
+                      task_date: date,
+                      task_time: time,
+                      is_completed: 0,
+                      time_zone: timeZone,
+                      task_msg: description
+                    })
+    }).then(() => setTask(true))
   }
 
   const dispatch = useDispatch()
@@ -107,12 +110,12 @@ function TaskForm({setTask}) {
       <div className={styles.form__container}>
         <label htmlFor="user">Assign User</label>
         <select name="user" id="user">
-          <option value={user_id}>Volvo</option>
+          <option value={user_id}>Prem Kumar</option>
         </select>
       </div>
-      <div className="btn">
-        <button className="btn btn-cancel">cancel</button>
-        <button className="btn btn-submit">submit</button>
+      <div className={styles.btns}>
+        <button className={styles.btn_cancel} onClick={() => setTask(true)}>cancel</button>
+        <button className={styles.btn_submit }>submit</button>
       </div>
     </FormContainer>
   )

@@ -1,28 +1,37 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from "styled-components";
-import TaskCard from './TaskCard';
-import TaskForm from './TaskForm';
-import TaskHeader from './TaskHeader';
-import { fetchUsers } from './redux/fetchUsers';
+import TaskCard from '../TaskCard';
+import { fetchUsers } from '../redux/fetchUsers';
 import { useSelector, useDispatch } from 'react-redux';
+import { TOKEN } from '../handlers/token';
+
+import { descAction, dateAction, timeAction, timeZoneAction } from '../redux/formData';
 
 const TaskContainer = styled.div`
-  /* border: 1px solid #999; */
-  /* padding: 5px 10px; */
-  margin:  5rem auto;
+
+  margin:  .65rem auto;
   max-width: 30rem;
 `
 
-function TaskBar({setTask}) {
+function TaskBar({ setTask }) {
 
   const user = useSelector(state => state.user)
   const dispatch = useDispatch()
+  
+  const handleEdit = (id, date, time, timezone, desc) => {
+    dispatch(descAction(desc))
+    dispatch(dateAction(date))
+    dispatch(timeAction(time))
+    dispatch(timeZoneAction(timezone))
+    setTask(false)
+    handleDelete(id)
+  }
 
   const handleDelete = async (id) => {
     await fetch(`https://stage.api.sloovi.com/task/lead_465c14d0e99e4972b6b21ffecf3dd691/${id}?company_id=company_413ef22b6237417fb1fba7917f0f69e7`, {
       method: "DELETE",
       headers: {
-        'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NTY1MTM4MjksIm5iZiI6MTY1NjUxMzgyOSwianRpIjoiNzA1MDZlZjctMzllNy00ZjI5LTlhMTYtNzkzNmM2M2Q2OGU0IiwiaWRlbnRpdHkiOnsibmFtZSI6IlN1bmRhciBQaWNoYWkiLCJlbWFpbCI6InNtaXRod2lsbHMxOTg5QGdtYWlsLmNvbSIsInVzZXJfaWQiOiJ1c2VyXzRlZTRjZjY3YWQ0NzRhMjc5ODhiYzBhZmI4NGNmNDcyIiwiaWNvbiI6Imh0dHA6Ly93d3cuZ3JhdmF0YXIuY29tL2F2YXRhci9jZjk0Yjc0YmQ0MWI0NjZiYjE4NWJkNGQ2NzRmMDMyYj9kZWZhdWx0PWh0dHBzJTNBJTJGJTJGczMuc2xvb3ZpLmNvbSUyRmF2YXRhci1kZWZhdWx0LWljb24ucG5nIiwiYnlfZGVmYXVsdCI6Im91dHJlYWNoIn0sImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.XNSyFWwTpmUEGuVpGIb92uYcnUd_mfgPBsh6FdV8f1U',
+        'Authorization': 'Bearer ' + TOKEN,
         'Accept': 'application/json',
         'Content-Type': 'application/json',          
       }
@@ -40,7 +49,7 @@ function TaskBar({setTask}) {
         <>
          {user.users.map(user => (
             <div key={user.id}>           
-              <TaskCard user={ user } handleDelete={ handleDelete } />
+              <TaskCard user={ user } handleEdit={handleEdit} handleDelete={ handleDelete } />
             </div>
           ))}
         </>

@@ -5,9 +5,10 @@ import { IoAdd } from "react-icons/io5";
 const TaskBtn = styled.div`
   display: flex;
   align-items: center;
-  padding: 1rem 1.5rem;
+  padding: .5rem 1rem;
   background: #f8f9fa;
   box-shadow: 1px 2px 3px rgba(0,0,0, .4);
+  margin-top: 2rem;
 
   .tasks{
     margin-right: auto;
@@ -30,12 +31,12 @@ const TaskBtn = styled.div`
   }
 `
 
-function TaskHeader({ count }) {
+function TaskHeader({ count, setTask }) {
 
   return (
     <TaskBtn>
       <p className="tasks">Tasks - {count}</p>
-      <IoAdd className="task__btn"/>
+      <IoAdd className="task__btn" onClick={() => setTask(false)}/>
   </TaskBtn>
   )
 }

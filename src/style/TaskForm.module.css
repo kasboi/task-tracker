@@ -21,3 +21,23 @@ select{
   display: flex;
   justify-content: space-between;
 }
+
+.btns {
+  text-align: right;
+  font-family: inherit;
+}
+.btn_cancel {
+  font-size: 1rem;
+  margin-right: 1rem;
+  padding: 5px 8px;
+  background: #495057;
+  color: white;
+  border: none;
+}
+.btn_submit {
+  font-size: 1rem;
+  padding: 5px 8px;
+  background: #2f9e44;
+  color: white;
+  border: none;
+}
